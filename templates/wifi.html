@@ -1,0 +1,65 @@
+{% args page, application %}
+{% include 'base_header.html' %}
+
+<h2>{{ page }}</h2>
+
+
+
+  <div class="col-md-7 col-lg-8">
+    <h4 class="mb-3">Wifi credentials</h4>
+    <form name="form" class="needs-validation" novalidate action="/settings/network" method="post">
+    
+      <div class="row g-3">
+        <div class="col-sm-6">
+        
+          <label for="SSID" class="form-label">SSID</label>
+          <input type="text" class="form-control" id="SSID" name="SSID" placeholder="" value="" required>
+          <div class="invalid-feedback">
+            Valid SSID is required.
+          </div>
+        </div>
+
+        <div class="col-sm-6">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" name="password" id="password" placeholder="" value="" required>
+          <div class="invalid-feedback">
+            Valid password is required.
+          </div>
+        </div>
+        
+        <div class="col-12">
+              <label for="device_name" class="form-label">Device Name</label>
+              <input type="text" name="device_name" class="form-control" id="device_name" required>
+              <div class="invalid-feedback">
+                Please enter a Device Name (no spaces or special characters allowed).
+              </div>
+            </div>
+        
+      <button class="w-100 btn btn-primary btn-lg" type="submit">Submit</button>
+      </form>
+      </div>
+
+<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(() => {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+</script>
+
+{% include 'base_footer.html' %}
+
