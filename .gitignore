@@ -152,3 +152,5 @@ mysql
 .DS_Store
 config.json
 boot.py
+templates/.*.py
+templates/*
