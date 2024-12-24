@@ -122,9 +122,8 @@ class Configuration(ConfigurationBase):
         super().__init__(configfile)
         
         if configfile:
-            self._configurationfactory = ConfigurationFactory()
             self.load_config()                
-            self.config_to_factory()
+            self.config_to_factory(ConfigurationFactory())
 
     def get_config_item(self,item):
         return(self._config_items[item])
@@ -142,10 +141,9 @@ class Configuration(ConfigurationBase):
 
         return(self._namespace[namespace])
     
-    def config_to_factory(self):
-        for name, clsobj in self._configurationfactory.get_objs().items():
+    def config_to_factory(self, _configurationfactory):
+        for name, clsobj in _configurationfactory.get_objs().items():
             self._config_items[name] = clsobj(self.namespace(name))      
-
 
 
 
