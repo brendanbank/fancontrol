@@ -14,8 +14,8 @@ def render(page, application):
   <body>
     <nav class=\"navbar navbar-expand-lg navbar-dark bg-dark\">
       <div class=\"container\">
-        <a class=\"navbar-brand\" href=\"#\">"""
-        yield str(application['application_name'])
+        <a class=\"navbar-brand\" href=\"/\">"""
+        yield str(application.application_name)
         yield """</a>
         <button class=\"navbar-toggler\" type=\"button\" data-bs-toggle=\"collapse\" data-bs-target=\"#navbarSupportedContent\" aria-controls=\"navbarSupportedContent\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">
           <span class=\"navbar-toggler-icon\"></span>
