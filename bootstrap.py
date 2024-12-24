@@ -27,21 +27,15 @@ from config import config
 
 
 app = Microdot()
-Session(app, secret_key='top-secret')
+Session(app, secret_key=config.app_password)
 Response.default_content_type = 'text/html'
-
-
 Template.initialize(loader_class=recompile.Loader)
-    
-application_vars = {}
-application_vars["application_name"] = "Fan Control"
-
 
 @app.route('/')
 @with_session
 @authorization_required
 async def index(req, session):
-    return Template('index.html').render(page='Home',application=application_vars)
+    return Template('index.html').render(page='Home',application=config)
 
 @app.route('/test')
 async def test(request):
@@ -76,7 +70,7 @@ async def test(request):
             },
         ]
 
-    return Template('test.html').render(page='Test',application=application_vars, form_fields=fields)
+    return Template('test.html').render(page='Test',application=config, form_fields=fields)
 
 
 @app.route('/static/<path:path>')
@@ -92,7 +86,7 @@ async def static(request, path):
 @app.route('/settings/<string:setting_name>', methods=['GET', 'POST'])
 async def setting_name(req, setting_name):
     print (f'req form = {req.form}')
-    return Template('wifi.html').render(page='Network Configuration Settings', application=application_vars)
+    return Template('wifi.html').render(page='Network Configuration Settings', application=config)
 
 async def task():
     ext="der"
