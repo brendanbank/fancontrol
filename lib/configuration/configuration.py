@@ -1,7 +1,7 @@
 import sys
 sys.path.append('/Users/brendan/src/fancontrol/lib')
 import json
-import ulogging as logging
+import logging
 from .factory import ConfigurationFactory
 
 log = logging.getLogger(__name__)
@@ -15,7 +15,7 @@ class ConfigurationBase:
         log.debug(f"started ConfigurationBase with configfile={configfile}")
         
         self._configfile = configfile
-        self._storage['_modified'] = False        
+        self._storage['_modified'] = False
         
         def _get(name):
                 

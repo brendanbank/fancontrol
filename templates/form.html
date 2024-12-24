@@ -1,0 +1,42 @@
+  <div class="col-md-7 col-lg-8">
+    <h4 class="mb-3">Wifi credentials</h4>
+    <form name="form" class="needs-validation" novalidate action="/settings/network" method="post">
+    
+      <div class="row g-3">
+      {% for field in form_fields %}
+
+        <div class="{{ field["columns"] }}">
+          <label for="{{ field["name"] }}" class="form-label">{{ field["text"] }}</label>
+          <input type="{{field["type"]}}" class="form-control{% if field["error"] %}  is-invalid{% endif %}" id="{{ field["name"] }}" name="{{ field["name"] }}" placeholder="" value="{{ field["value"] }}" required>
+          <div class="invalid-feedback">
+            {{ field["error_txt"] }}
+          </div>
+        </div>
+
+      {% endfor %}
+      
+      <button class="w-100 btn btn-primary btn-lg" type="submit">Submit</button>
+      </form>
+      </div>
+
+<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(() => {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+</script>

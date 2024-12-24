@@ -1,6 +1,6 @@
 import sys
 sys.path.append('/Users/brendan/src/fancontrol/lib')
-import ulogging as logging
+import logging
 import os
 
 log = logging.getLogger(__name__)
