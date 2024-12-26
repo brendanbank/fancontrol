@@ -30,18 +30,16 @@ class ConfigurationFactory:
             These usually describe a protocol (like dyndns2)
         """
         
-        all_configuration_classes = list ()
-        
-        for fiel in os.ilistdir(CONFIGURATION_DIR):                               
-            if fiel[0].find(".py", len(fiel[0]) -3, len(fiel[0])) > 0:
-                name = fiel[0].replace(".py", "")
+        for fiel in os.listdir(CONFIGURATION_DIR):                               
+            if fiel.find(".py", len(fiel) -3, len(fiel)) > 0:
+                name = fiel.replace(".py", "")
                 
                 items_location = ".".join(__name__.split('.')[:-1]) + '.items'                
                 
                 pkg_name = f'{items_location}.{name}'
                 
                 log.info (f'import {pkg_name}')
-                test = __import__(pkg_name)
+                __import__(pkg_name)
 
                 module_obj = sys.modules[pkg_name]
                 

@@ -22,14 +22,11 @@ class ConfigurationBase:
             if not name in self._storage.keys():
                 self._storage[name] = return_val = None
                 
-            elif type(self._storage[name]) == dict:
+            elif self.isnamespace(name):
                 return_val = self.namespace(name)
             else:
                 return_val = self._storage[name]
-            
-            if self.isnamespace(name):
-                return_val = self._namespace[name]
-            
+                        
             log.debug(f'_get for {name} retured {return_val}')
             
             return return_val
