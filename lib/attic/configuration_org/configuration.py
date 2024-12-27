@@ -1,10 +1,63 @@
 import sys
-sys.path.append('/Users/brendan/src/fancontrol/lib')
 import json
+import os
 import logging
-from .factory import ConfigurationFactory
 
 log = logging.getLogger(__name__)
+
+class ItemBase:
+    _priority = 255
+    config_attribute = False
+    config_name = None
+    
+    def __init__(self, application_configuration, item_configuration):
+            self.item_configuration =  item_configuration
+            self.application_configuration = application_configuration
+            
+    @classmethod
+    def configuration_name(cls):
+        return(cls.config_name)
+
+class ItemFactory:
+    
+    def __init__(self, item_directory = None):
+        self._configuration_classes = dict()
+        self.item_directory = item_directory
+        self._register()
+
+    def _register(self):
+        if self.item_directory:
+            for fiel in os.listdir(self.item_directory):                               
+                if fiel.find(".py", len(fiel) -3, len(fiel)) > 0:
+                    name = fiel.replace(".py", "")
+                    
+                    items_location = ".".join(__name__.split('.')[:-1]) + '.items'                
+                    
+                    pkg_name = f'{items_location}.{name}'
+                    
+                    log.info (f'import {pkg_name}')
+                    __import__(pkg_name)
+
+                    module_obj = sys.modules[pkg_name]
+                    
+                    for item in dir(module_obj):
+                        obj = getattr(module_obj,item)
+                        if (str(type(obj)) == str(type)) :
+                            if issubclass(obj, ItemBase) and obj != ItemBase:
+                                self._configuration_classes[obj.configuration_name()] = obj
+
+            
+
+            log.debug(f'loaded configuration classes {self._configuration_classes}')
+
+    def get_objs(self):
+        return(self._configuration_classes)
+
+    def get(self, name):
+        if name in self._configuration_classes.keys():
+            return(self._configuration_classes.get(name))
+        else:
+            return(None)
 
 class NamespaceException(Exception):
     pass
@@ -120,7 +173,7 @@ class Configuration(ConfigurationBase):
         
         if configfile:
             self.load_config()                
-            self.config_to_factory(ConfigurationFactory())
+            self.config_to_factory()
 
     def get_config_item(self,item):
         return(self._config_items[item])
@@ -138,9 +191,9 @@ class Configuration(ConfigurationBase):
 
         return(self._namespace[namespace])
     
-    def config_to_factory(self, _configurationfactory):
+    def config_to_factory(self, _configurationfactory=ItemFactory()):
         for name, clsobj in _configurationfactory.get_objs().items():
-            self._config_items[name] = clsobj(self.namespace(name))      
+            self._config_items[name] = clsobj(self,self.namespace(name))      
 
 
 

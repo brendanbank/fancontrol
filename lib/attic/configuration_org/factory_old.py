@@ -7,28 +7,26 @@ log = logging.getLogger(__name__)
 
 CONFIGURATION_DIR = "lib/configuration/items"
 
-class BaseConfiguration:
+class ItemBase:
     _priority = 255
     config_attribute = False
     config_name = None
     
-    def __init__(self, configuration):
-            self.configuration =  configuration
+    def __init__(self, application_configuration, item_configuration):
+            self.item_configuration =  item_configuration
+            self.application_configuration = application_configuration
             
     @classmethod
     def configuration_name(cls):
         return(cls.config_name)
 
-class ConfigurationFactory:
+class ItemFactory:
     
     def __init__(self):
         self._configuration_classes = dict()
         self._register()
 
     def _register(self):
-        """ Register all account (type) classes.
-            These usually describe a protocol (like dyndns2)
-        """
         
         for fiel in os.listdir(CONFIGURATION_DIR):                               
             if fiel.find(".py", len(fiel) -3, len(fiel)) > 0:
@@ -46,7 +44,7 @@ class ConfigurationFactory:
                 for item in dir(module_obj):
                     obj = getattr(module_obj,item)
                     if (str(type(obj)) == str(type)) :
-                        if issubclass(obj, BaseConfiguration) and obj != BaseConfiguration:
+                        if issubclass(obj, ItemBase) and obj != ItemBase:
                             self._configuration_classes[obj.configuration_name()] = obj
 
         
