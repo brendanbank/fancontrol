@@ -1,0 +1,64 @@
+{% args page, application, session %}
+{% include 'base_header.html' %}
+
+
+
+<div class="col">
+
+    <form name="form" class="needs-validation" novalidate action="" method="post">
+
+        <div class="row g-3 justify-content-md-center">
+          <div class="col-md-3 p-1 text-center h3">
+          Login to {{application.application_name}}
+          </div>
+        </div>
+        <div class="row g-3 justify-content-md-center">
+          <div class="col-md-3 p-1">
+              <input type="username" id="username" placeholder="username" name="username" class="form-control" required/>
+              <div class="invalid-feedback">
+                Username or password unknown (try the default username: admin and password: admin.
+              </div>
+          </div>
+        </div>
+        <div class="row g-3 justify-content-md-center">
+          <div class="col-md-3 p-1">
+              <input type="password" id="password" placeholder="password" name="password" class="form-control" required/>
+              <div class="invalid-feedback">
+                Username or password unknown.
+              </div>
+          </div>
+        </div>
+        <div class="row g-3 justify-content-md-center">
+            <div class="col-md-3 p-1 d-grid gap-2">
+                <button class="btn btn-primary" type="submit">Login</button>
+            </div>
+        </div>
+        
+     
+    </form>
+
+</div>
+
+<script>
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(() => {
+  'use strict'
+
+  // Fetch all the forms we want to apply custom Bootstrap validation styles to
+  const forms = document.querySelectorAll('.needs-validation')
+
+  // Loop over them and prevent submission
+  Array.from(forms).forEach(form => {
+    form.addEventListener('submit', event => {
+      if (!form.checkValidity()) {
+        event.preventDefault()
+        event.stopPropagation()
+      }
+
+      form.classList.add('was-validated')
+    }, false)
+  })
+})()
+</script>
+
+{% include 'base_footer.html' %}

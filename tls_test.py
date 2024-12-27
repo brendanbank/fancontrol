@@ -1,40 +1,22 @@
-
 import ssl
-import sys
-sys.path.append('/Users/brendan/src/fancontrol/lib')
 import binascii
-
-from microdot import Microdot
+from microdot_asyncio import Microdot, send_file
+from microdot_asyncio_websocket import with_websocket
 
 app = Microdot()
 
-html = '''<!DOCTYPE html>
-<html>
-    <head>
-        <title>Microdot Example Page</title>
-        <meta charset="UTF-8">
-    </head>
-    <body>
-        <div>
-            <h1>Microdot Example Page</h1>
-            <p>Hello from Microdot!</p>
-            <p><a href="/shutdown">Click to shutdown the server</a></p>
-        </div>
-    </body>
-</html>
-'''
-
 
 @app.route('/')
-async def hello(request):
-    return html, 200, {'Content-Type': 'text/html'}
+def index(request):
+    return send_file('tls/index.html')
 
 
-@app.route('/shutdown')
-async def shutdown(request):
-    request.app.shutdown()
-    return 'The server is shutting down...'
-
+@app.route('/echo')
+@with_websocket
+async def echo(request, ws):
+    while True:
+        data = await ws.receive()
+        await ws.send(data)
 
 cert = binascii.unhexlify(
     b"308205b53082039da00302010202090090195a9382cbcbef300d06092a864886f70d01010b050030"
@@ -143,9 +125,3 @@ sslctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
 sslctx.load_cert_chain(cert, keyfile=key)
 app.run(port=4443, debug=True, ssl=sslctx)
 
-# ext = 'der' if sys.implementation.name == 'micropython' else 'pem'
-# sslctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-# sslctx.load_cert_chain(certfile='cert/cert.der', keyfile = 'cert/key.' + ext)
-# 
-# 
-# app.run(port=4443, debug=True, ssl=sslctx)
