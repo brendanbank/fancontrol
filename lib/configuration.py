@@ -8,10 +8,11 @@ log = logging.getLogger(__name__)
 class ItemBase:
     _priority = 255
     item_name = None
+    startup_methods = []
     
     def __init__(self, application_configuration, item_configuration):
             self.item_configuration =  item_configuration
-            self.application_configuration = application_configuration
+            self.application_configuration = application_configuration            
             
     @classmethod
     def factory_configuration_name(cls):
@@ -19,15 +20,26 @@ class ItemBase:
 
 class ItemFactory:
     
-    def __init__(self, item_directory):
+    def __init__(self, item_directory, config):
         self._configuration_classes = dict()
         self.item_directory = item_directory
+        self._list = list ()
+        self._config_items = {}
+        self.config = config
         self._register()
+        self.factory_to_obj()
+        config.factory = self
+        
+    def run_startup_items(self):
+        for clsobj in _list:
+            print (f'----- run {clsobj.__class__.__name___} {clsobj.startup_methods}')
 
     def _register(self):
         if self.item_directory:
+            all_configuration_classes = list()
+            log.debug(f'try to read from directory {self.item_directory}')
             for fiel in os.listdir(self.item_directory):                               
-                if fiel.find(".py", len(fiel) -3, len(fiel)) > 0:
+                if fiel.endswith(".py"):
                     name = fiel.replace(".py", "")
                     items_location = ".".join(self.item_directory.split('/'))                
                     pkg_name = f'{items_location}.{name}'
@@ -38,13 +50,14 @@ class ItemFactory:
                     module_obj = sys.modules[pkg_name]
                     
                     for item in dir(module_obj):
-                        obj = getattr(module_obj,item)
-                        if (str(type(obj)) == str(type)) :
-                            if issubclass(obj, ItemBase) and obj != ItemBase:
-                                self._configuration_classes[obj.factory_configuration_name()] = obj
+                        cls = getattr(module_obj,item)
+                        if (str(type(cls)) == str(type)) :
+                            if issubclass(cls, ItemBase) and cls != ItemBase:
+                                self._configuration_classes[cls.factory_configuration_name()] = cls
+                                all_configuration_classes.append(cls)
 
             
-
+            self._list = sorted(all_configuration_classes, key=lambda k: k._priority)
             log.debug(f'loaded configuration classes {self._configuration_classes}')
         else:
             log.debug(f'no configuration classes directory configured')
@@ -54,10 +67,16 @@ class ItemFactory:
         return(self._configuration_classes)
 
     def get(self, name):
-        if name in self._configuration_classes.keys():
-            return(self._configuration_classes[name])
+        if name in self._config_items.keys():
+            return(self._config_items[name])
         else:
             return(None)
+        
+    def factory_to_obj(self):
+        for name, clsobj in self.get_objs().items():
+            self._config_items[name] = clsobj(self.config,self.config.namespace(name))      
+
+
 
 class NamespaceException(Exception):
     pass
@@ -71,8 +90,8 @@ class ConfigurationBase:
         self._storage['_modified'] = False
         
         def _get(name):
-                
             if not name in self._storage.keys():
+                log.debug(f'not name in _storage')
                 self._storage[name] = return_val = None
                 
             elif self.isnamespace(name):
@@ -90,8 +109,6 @@ class ConfigurationBase:
 
             if not name in self._storage.keys():
                 self._storage[name] = None
-            if type(self._storage[name]) == dict:
-                raise NamespaceException(f'"{name}" is defined as a namespace!')
             
             self._storage['_modified'] = True
             self._storage[name] = value
@@ -162,11 +179,11 @@ class ConfigurationBase:
 
 
 class Configuration(ConfigurationBase):
-    def __init__(self, DICT_OBJ, configfile="/config.json"):
+    def __init__(self, DICT_OBJ={}, configfile="/config.json"):
         
         self._namespace = {}
-        self._config_items = {}
         self._storage = DICT_OBJ
+        self._itemfactory = list()
         
         log.debug(f"started Configuration with configfile {configfile}")
         super().__init__(configfile)
@@ -174,9 +191,17 @@ class Configuration(ConfigurationBase):
         if configfile:
             self.load_config()                
 
-    def get_config_item(self,item):
-        return(self._config_items[item])
-    
+    @property
+    def factory(self):
+        return self._itemfactory[0]
+
+    @factory.setter
+    def factory(self, factory):
+        if self._itemfactory:
+            self._itemfactory[0] = factory
+        else:
+            self._itemfactory.append(factory)
+            
     def isnamespace(self,namespace):
         return(getattr(self._namespace,namespace,None))
 
@@ -189,7 +214,3 @@ class Configuration(ConfigurationBase):
             self._namespace[namespace] = Configuration(self._storage[namespace], configfile=None)
 
         return(self._namespace[namespace])
-    
-    def config_to_factory(self, items_directory):
-        for name, clsobj in ItemFactory(items_directory).get_objs().items():
-            self._config_items[name] = clsobj(self,self.namespace(name))      

@@ -22,7 +22,6 @@ from microdot.utemplate import Template
 from microdot.session import Session, with_session
 
 from utemplate import recompile
-
 from config import config
 import config as config_obj
 

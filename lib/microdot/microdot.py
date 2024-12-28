@@ -792,7 +792,7 @@ class Response:
         if compressed:
             headers['Content-Encoding'] = compressed \
                 if isinstance(compressed, str) else 'gzip'
-
+        print (filename)
         f = stream or open(filename + file_extension, 'rb')
         return cls(body=f, status_code=status_code, headers=headers)
 
