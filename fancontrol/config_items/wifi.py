@@ -18,13 +18,12 @@ class WiFiConfiguration(ItemBase):
     """ wifi configuration class """
     _priority = 1    
     item_name = 'wifi'
-    config_description = 'WiFi Configuration'
-    startup_actions = [ 'config_ap' ]
+    item_description = 'WiFi Configuration'
     
     def __init__(self, application_configuration, item_configuration):
         log.debug(f'WiFiConfiguration started')
         super().__init__(application_configuration, item_configuration)
-        
+        self.config_ap()
             
     def config_ap(self):
         if not self.item_configuration.ap_ssid:

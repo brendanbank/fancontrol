@@ -8,12 +8,12 @@ log = logging.getLogger(__name__)
 class ItemBase:
     _priority = 255
     item_name = None
-    startup_methods = []
+    form = None
     
     def __init__(self, application_configuration, item_configuration):
             self.item_configuration =  item_configuration
             self.application_configuration = application_configuration            
-            
+        
     @classmethod
     def factory_configuration_name(cls):
         return(cls.item_name)
@@ -30,10 +30,6 @@ class ItemFactory:
         self.factory_to_obj()
         config.factory = self
         
-    def run_startup_items(self):
-        for clsobj in _list:
-            print (f'----- run {clsobj.__class__.__name___} {clsobj.startup_methods}')
-
     def _register(self):
         if self.item_directory:
             all_configuration_classes = list()
@@ -73,10 +69,9 @@ class ItemFactory:
             return(None)
         
     def factory_to_obj(self):
-        for name, clsobj in self.get_objs().items():
-            self._config_items[name] = clsobj(self.config,self.config.namespace(name))      
-
-
+        for name, cls in self.get_objs().items():
+            clsobj = cls(self.config,self.config.namespace(name))
+            self._config_items[name] = clsobj
 
 class NamespaceException(Exception):
     pass
@@ -96,6 +91,8 @@ class ConfigurationBase:
                 
             elif self.isnamespace(name):
                 return_val = self.namespace(name)
+            elif type(self._storage[name]) == dict:
+                raise NamespaceException(f'"dict {name}" is not defined as a namespace!')
             else:
                 return_val = self._storage[name]
                         

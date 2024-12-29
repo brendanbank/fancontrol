@@ -14,7 +14,6 @@ config = Configuration(configfile="config.json")
 application_name = "Fan Control"
 app = Microdot()
 
-
 saveconfig = False
 
 if config.application_name == None:
@@ -44,6 +43,8 @@ try:
 except:
     pass
 
+template_dir = 'fancontrol/templates/'
+
 Session(app, secret_key=config.app_password)
 Response.default_content_type = 'text/html'
-Template.initialize(loader_class=recompile.Loader, template_dir="fancontrol/templates")
+Template.initialize(loader_class=recompile.Loader, template_dir=template_dir)

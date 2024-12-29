@@ -19,15 +19,16 @@ async def index(req, session):
 @app.route('/static/<path:path>')
 @with_session
 async def static(request, session, path):
+    
+    try:
+        os.stat(f'fancontrol/static/{path}')
+        return send_file('fancontrol/static/' + path , max_age=(3600))
+    except OSError:
+        log.error (f'file static/{path} not found!')
+
     try:
         os.stat(f'fancontrol/static/{path}.gz')
     except OSError:
         log.error (f'file static/{path}.gz not found!')
         abort(404, reason="File not found")
     return send_file('fancontrol/static/' + path, compressed=True, file_extension='.gz', max_age=(3600))
-
-@app.route('/settings/<string:setting_name>', methods=['GET', 'POST'])
-@authorization_required
-async def setting_name(request, setting_name):
-    session = request.app._session.get(request)
-    return Template('wifi.html').render(page='Network Configuration Settings', application=config, session=session)
