@@ -1,0 +1,6 @@
+/* Custom CSS for Floating Alert */
+.floating-alert {
+    position: fixed;
+    top: 50px;
+    z-index: 1050; /* Ensure it stays on top of most elements */
+}
