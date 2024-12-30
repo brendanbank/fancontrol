@@ -16,12 +16,12 @@ def validate_hostname(hostname):
     return True if regex.search(hostname) else False
 
 class MQTTForm(FormBase):
-    broker_hostname = FormText(label="Broker Hostname", error="Hostname can only contain numbers and letters.", validation=validate_hostname)
-    broker_port = FormNumber(label="Broker Port", value=1883, error="Broker Port can only contain numbers")
-    broker_username = FormText(label="Broker Username")
-    broker_password = FormPassword(label="Broker Password")
+    broker_hostname = FormText(label="Broker Hostname", css="col-md-6", error_txt="can only contain numbers and letters.", validation=validate_hostname)
+    broker_port = FormNumber(label="Broker Port", value=1883, css="col-md-6", error_txt="can only contain numbers")
+    broker_username = FormText(label="Broker Username", css="col-md-6")
+    broker_password = FormPassword(label="Broker Password", css="col-md-6")
     broker_ssl = FormCheckbox(label="Use Secure Socket Layer (SSL)?", value="1", required=False)
-    logging_channel = FormText(label="Logging channel", value="fancontrol/logging")
+    logging_channel = FormText(label="Logging channel", value="fancontrol/logging", css="col-md-6")
     reporting_channel = FormText(label="Reporting channel",value="fancontrol/reporting")
     command_channel = FormText(label="Command channel",value="fancontrol/command")
 
@@ -33,14 +33,13 @@ class MQTTConfiguration(ItemBase):
     item_name = 'mqtt'
     item_description = 'MQTT Configuration'
     
-    
     def __init__(self, application_configuration, item_configuration):
         log.debug(f'{self.__class__.__name__} started')
         super().__init__(application_configuration, item_configuration)
-        self._from = MQTTForm
+        self._form = MQTTForm
         
     def process_form(self,session,request):
-        form = self._from()
+        form = self._form().newInstance()        
         form_dict = request.form
         valid, form_list = form.from_form(form_dict)
         import json

@@ -14,4 +14,5 @@ async def setting_name(request, setting_name):
     session = request.app._session.get(request)
     
     setting_obj = config.factory.get(setting_name)
+    
     return setting_obj.process_form(session, request)

@@ -1,6 +1,7 @@
 import re
 import logging
 import json
+import types
 
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
@@ -10,27 +11,45 @@ def default_validation(value):
     return True
 
 class FormItemBase(object):
-    error="Field cannot be empty."
+    error="cannot be empty."
+    default_arguments = {
+                            'name': "",
+                            'value': "",
+                            'label': None,
+                            'validation': default_validation,
+                            'css': "col-md-12",
+                            'valid': True,
+                            'valid_css': "is-valid",
+                            'required': True,
+                            'error_txt': None
+                        }
     
-    def __init__(self,
-                 name=None,
-                 value="",
-                 label=None,
-                 validation=default_validation,
-                 css="form-group row",
-                 invalid_css = "is-invalid",
-                 required = True,
-                 *args, **kwargs):
-        
-        self.valid=True
-        self.required = required
-        self.invalid_css = invalid_css
-        self.validation=validation
-        self.name = name
-        self.label = label
-        self.value = value
-        self.css = css
+#     def __init__(self,
+#                  name=None,
+#                  value="",
+#                  label=None,
+#                  validation=default_validation,
+#                  css="col-md-12",
+#                  valid_css = "is-valid",
+#                  required = True,
+#                  error_txt=None,
+#                  *args, **kwargs):
 
+    def __init__(self, *args, **kwargs):
+        log.debug(f'called with *args: {args}, **kwargs:{kwargs}')
+        
+        self._kwargs = kwargs
+        self._args = args
+        
+        for key, value in self.default_arguments.items():
+            setattr(self,key,value)
+            
+        for key, value in kwargs.items():
+            setattr(self,key,value)
+            
+        if self.error_txt:
+            self.error = self.error_txt
+            
 def validate_password(password):
     """
     Validates a password to ensure it has at least:
@@ -68,7 +87,7 @@ def validate_numbers(value):
 
 class FormNumber(FormItemBase):
     type="text"
-    error="Field can only contain numbers."
+    error="can only contain numbers."
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -90,20 +109,71 @@ class FormCheckbox(FormItemBase):
 
 class FormBase(object):
     def __init__(self, css=""):
-        self.css = ""
+        self.css = css
         self.form_items = {}
         self._order = list()
+        self._class_args = list()
+        self._cls = None
+        
+        self._fill_self()
+        self._create_empty_class()
+        
+        
+    def _fill_self(self):
         for cls_attribute in dir(self):
             try:
                 obj = getattr(self.__class__, cls_attribute)
             except:
                 continue
-            
+
             if issubclass(obj.__class__, FormItemBase):
                 self._order.append(cls_attribute)
                 clsobj = getattr(self, cls_attribute)
-                clsobj.name = cls_attribute
+                setattr(clsobj, 'name', cls_attribute)
+                
+#                 obj.name = cls_attribute
+                
+                print (clsobj)
+                
                 self.form_items[cls_attribute] = clsobj
+                
+                clsobj._kwargs['name'] = cls_attribute
+                
+                self._class_args.append(
+                                    {'_name': cls_attribute,
+                                     '_args': clsobj._args ,
+                                     '_kwargs': clsobj._kwargs,
+                                     '_cls': obj.__class__
+                                })
+
+    def _create_empty_class(self):
+        
+        name = 'Dynamnic' + self.__class__.__name__
+        
+        def clsexec(ns):
+            attrs = []
+            ns['type'] = name
+            ns['attrs'] = attrs
+            
+        self._cls = types.new_class(name, bases=(FormBase,), exec_body=clsexec)
+
+
+    def newInstance(self):
+        new_formbase = FormBase()
+        log.debug (self.__class__.__name__)
+        
+        clsobj = self._cls()
+        
+        for form_item in self._class_args:
+            setattr(clsobj, form_item['_name'], form_item['_cls'](*form_item['_args'],**form_item['_kwargs']) )
+        
+        clsobj.css = self.css
+        clsobj.form_items = self.form_items
+        clsobj._order = self._order
+        clsobj._class_args = self._class_args
+        clsobj._cls = self._cls
+    
+        return(clsobj)
         
     def from_form(self, form):
         self.form_list = list()
@@ -125,6 +195,7 @@ class FormBase(object):
                     
                 if not obj.valid:
                     valid = False
+                    obj.valid_css = "is-invalid"
             elif form and not form.get(name) and obj.type == "checkbox":
                 obj.value = "off"
             else: 
@@ -138,7 +209,7 @@ class FormBase(object):
                 "valid": obj.valid,
                 "value": obj.value,
                 "error": obj.error,
-                "invalid_css":  obj.invalid_css,
+                "valid_css":  obj.valid_css,
                 "css": obj.css,
                 "required": obj.required
                 })
@@ -154,11 +225,11 @@ def validate_hostname(hostname):
     return True if regex.search(hostname) else False
 
 class MyForm(FormBase):
-    broker_hostname = FormText(label="Broker Hostname", error="Hostname can only contain numbers and letters.", validation=validate_hostname)
-    broker_port = FormNumber(label="Broker Port", error="Broker Port can only contain numbers")
-    broker_username = FormText(label="Broker Username")
-    broker_password = FormPassword(label="Broker Password")
-    broker_ssl = FormCheckbox(label="Use Secure Socket Layer (SSL)?", value="1")
+    broker_hostname = FormText(label="Broker Hostname", css="col-md-6", error_txt="can only contain numbers and letters.", validation=validate_hostname)
+    broker_port = FormNumber(label="Broker Port", value=1883, css="col-md-6", error_txt="can only contain numbers")
+    broker_username = FormText(label="Broker Username", css="col-md-6")
+    broker_password = FormPassword(label="Broker Password", css="col-md-6")
+    broker_ssl = FormCheckbox(label="Use Secure Socket Layer (SSL)?", value="1", required=False)
     logging_channel = FormText(label="Logging channel", value="fancontrol/logging")
     reporting_channel = FormText(label="Reporting channel",value="fancontrol/reporting")
     command_channel = FormText(label="Command channel",value="fancontrol/command")
@@ -173,11 +244,18 @@ if __name__ == "__main__":
 #     a = Password("brendan", "Bredan!@")
 #     number = FormNumber("brendan", "1")
 #     print (number.validate())
-    valid, form_list = MyForm().from_form({})
+    print ("main")
+    form = MyForm()
+    new_instance = form.newInstance()
+    
+    valid, form_dict = new_instance.from_form(form_dict)
+    
+    print (json.dumps(form_dict))
+    
 #     print (form_list)
 #     print(validate_password("test"))
 #     vaobj = form.from_form(form_dict)
-    print (json.dumps(form_list))
+#     print (json.dumps(form_list))
 
     
 #     print(a.validate())
