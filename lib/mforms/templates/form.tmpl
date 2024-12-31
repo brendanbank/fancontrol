@@ -1,11 +1,10 @@
-{% args page, application, session, form%}
-{% include 'base_header.html' %}
+{% args header, form %}
 
 
 <form action="" method="post" class="needs-validation row justify-content-md-center" novalidate>
 
 <div class="col-md-12">
-        <h2 class="text-center">{{ page }}</h2>
+        <h2 class="text-center">{{ header }}</h2>
 </div>
 
     <div class="row mt-3 col-md-9">
@@ -13,11 +12,32 @@
 {% for field in form %}
 {% if field.get("type") == "checkbox" %}
 
+                <div class="{{ field.get("css") }} position-relative mt-3">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" name="{{ field.get("name") }}" {% if field.get("value") == "on" %}checked {% endif %}id="{{ field.get("name") }}">
+                      <label class="form-check-label" for="{{ field.get("name") }}"><small>{{ field.get("label") }}</small></label>
+                    </div>
+                </div>
+
+
+{% elif field.get("type") == "hr" %}
+
+<!--
+<div class="div-line">
+   <hr class="hr-line ">
+   <span class="text-line">This is text</span>
+</div>
+-->
+            <div class="{{ field.get("css") }} position-relative mt-5 text-center div-line">
+                   <hr class="hr-line ">
+                   <span class="text-line fw-bold fs-6">{{ field.get("value") }}</span>
+
+            </div>
 {% else %}
             <div class="{{ field.get("css") }} position-relative mt-3">
                 <label for="{{ field.get("name") }}" class="form-label"><small>{{ field.get("label") }}</small></label>
                 
-                <input type="text" class="form-control{% if field.get("value") != "" %} {{ field.get("valid_css") }}"{% endif %}"
+                <input type="text" class="form-control{% if field.get("value") != "" %} {{ field.get("valid_css") }}{% endif %}"
                         id="{{ field.get("name") }}" name="{{ field.get("name") }}"
                         value="{{ field.get("value") }}"
                         aria-describedby="{{ field.get("name") }}_feedback" required>
@@ -58,6 +78,3 @@
                 </div>
 -->
 
-
-
-{% include 'base_footer.html' %}

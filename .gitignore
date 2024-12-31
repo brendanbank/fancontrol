@@ -153,3 +153,5 @@ mysql
 config.json
 boot.py
 templates/*.py
+.idea
+/txt.json

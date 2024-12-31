@@ -1,0 +1,124 @@
+<form action="" method="post" class="needs-validation row justify-content-md-center" novalidate>
+
+<div class="col-md-12">
+        <h2 class="text-center">MyForm</h2>
+</div>
+
+    <div class="row mt-3 col-md-9">
+
+            <div class="col-md-6 position-relative mt-3">
+                <label for="broker_hostname" class="form-label"><small>Broker Hostname</small></label>
+                
+                <input type="text" class="form-control is-valid"
+                        id="broker_hostname" name="broker_hostname"
+                        value="srv4.bgwlan.nl"
+                        aria-describedby="broker_hostname_feedback" required>
+             
+                <div id="broker_hostname_feedback" class="invalid-tooltip">
+                  Broker Hostname cannot be empty. 
+                </div>
+              </div>
+            <div class="col-md-6 position-relative mt-3">
+                <label for="broker_port" class="form-label"><small>Broker Port</small></label>
+                
+                <input type="text" class="form-control is-valid"
+                        id="broker_port" name="broker_port"
+                        value="1"
+                        aria-describedby="broker_port_feedback" required>
+             
+                <div id="broker_port_feedback" class="invalid-tooltip">
+                  Broker Port can only contain numbers. 
+                </div>
+              </div>
+            <div class="col-md-6 position-relative mt-3">
+                <label for="broker_username" class="form-label"><small>Broker Username</small></label>
+                
+                <input type="text" class="form-control"
+                        id="broker_username" name="broker_username"
+                        value=""
+                        aria-describedby="broker_username_feedback" required>
+             
+                <div id="broker_username_feedback" class="invalid-tooltip">
+                  Broker Username cannot be empty. 
+                </div>
+              </div>
+            <div class="col-md-6 position-relative mt-3">
+                <label for="broker_password" class="form-label"><small>Broker Password</small></label>
+                
+                <input type="text" class="form-control"
+                        id="broker_password" name="broker_password"
+                        value=""
+                        aria-describedby="broker_password_feedback" required>
+             
+                <div id="broker_password_feedback" class="invalid-tooltip">
+                  Broker Password Password field must contain at least 8 characters has to have one letter and digit and a special characters "[!@#$%^&*(),.?\:{}|<>~_]." 
+                </div>
+              </div>
+
+            <div class="col-md-12 position-relative mt-3">
+                <label for="logging_channel" class="form-label"><small>Logging channel</small></label>
+                
+                <input type="text" class="form-control is-valid"
+                        id="logging_channel" name="logging_channel"
+                        value="fancontrol/logging"
+                        aria-describedby="logging_channel_feedback" required>
+             
+                <div id="logging_channel_feedback" class="invalid-tooltip">
+                  Logging channel cannot be empty. 
+                </div>
+              </div>
+            <div class="col-md-12 position-relative mt-3">
+                <label for="reporting_channel" class="form-label"><small>Reporting channel</small></label>
+                
+                <input type="text" class="form-control is-valid"
+                        id="reporting_channel" name="reporting_channel"
+                        value="fancontrol/reporting"
+                        aria-describedby="reporting_channel_feedback" required>
+             
+                <div id="reporting_channel_feedback" class="invalid-tooltip">
+                  Reporting channel cannot be empty. 
+                </div>
+              </div>
+            <div class="col-md-12 position-relative mt-3">
+                <label for="command_channel" class="form-label"><small>Command channel</small></label>
+                
+                <input type="text" class="form-control is-valid"
+                        id="command_channel" name="command_channel"
+                        value="fancontrol/command"
+                        aria-describedby="command_channel_feedback" required>
+             
+                <div id="command_channel_feedback" class="invalid-tooltip">
+                  Command channel cannot be empty. 
+                </div>
+              </div>
+</div>
+
+
+    <div class="row mt-3">
+    
+        <div class="col-md-4 position-relative text-center">
+        </div>
+
+        <div class="col-md d-grid gap-2 col-md">
+          <button class="btn btn-primary" type="submit">Submit</button>
+
+        </div>
+        <div class="col-md-4 position-relative text-center">
+        </div>
+    </div>
+
+</form>
+
+<!--
+                <div class="col-md-sm-2">
+                    &nbsp;
+                </div>
+                <div class="col-md-sm-3">
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" name="command_channel" id="command_channel">
+                      <label class="form-check-label" for="command_channel">Command channel</label>
+                    </div>
+                </div>
+-->
+
+

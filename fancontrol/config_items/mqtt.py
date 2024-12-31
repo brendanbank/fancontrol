@@ -6,7 +6,8 @@ import re
 
 from fancontrol.config import config
 from configuration import ItemBase
-from fancontrol.formitems import FormBase, FormText, FormNumber, FormCheckbox, validate_hostname, FormPassword
+from mforms import BaseForm, TextField, NumberField, CheckboxField, PasswordField, LayoutHR
+from mforms.validators import validate_hostname
 from microdot.utemplate import Template
 
 def validate_hostname(hostname):
@@ -15,15 +16,19 @@ def validate_hostname(hostname):
     log.debug(f'validate {hostname}: {regex.search(hostname)}')
     return True if regex.search(hostname) else False
 
-class MQTTForm(FormBase):
-    broker_hostname = FormText(label="Broker Hostname", css="col-md-6", error_txt="can only contain numbers and letters.", validation=validate_hostname)
-    broker_port = FormNumber(label="Broker Port", value=1883, css="col-md-6", error_txt="can only contain numbers")
-    broker_username = FormText(label="Broker Username", css="col-md-6")
-    broker_password = FormPassword(label="Broker Password", css="col-md-6")
-    broker_ssl = FormCheckbox(label="Use Secure Socket Layer (SSL)?", value="1", required=False)
-    logging_channel = FormText(label="Logging channel", value="fancontrol/logging", css="col-md-6")
-    reporting_channel = FormText(label="Reporting channel",value="fancontrol/reporting")
-    command_channel = FormText(label="Command channel",value="fancontrol/command")
+class MQTTForm(BaseForm):
+    hr_line_1 = LayoutHR(value="Broker Configuration")
+    broker_hostname = TextField(label="Broker Hostname", css="col-md-6", error_txt="can only contain numbers and letters.", validation=validate_hostname)
+    broker_port = NumberField(label="Broker Port", value=1883, css="col-md-6", error_txt="can only contain numbers")
+    broker_username = TextField(label="Broker Username", css="col-md-6")
+    broker_password = PasswordField(label="Broker Password", css="col-md-6")
+    broker_ssl = CheckboxField(label="Use Secure Socket Layer (SSL)?", value="on", required=False)
+    hr_line_2 = LayoutHR(value="Channel Configuration")
+    logging_channel = TextField(label="Logging channel", value="fancontrol/logging", css="col-md-4")
+    reporting_channel = TextField(label="Reporting channel",value="fancontrol/reporting",css="col-md-4")
+    command_channel = TextField(label="Command channel",value="fancontrol/command",css="col-md-4")
+    hr_line_3 = LayoutHR()
+
 
 class MQTTConfiguration(ItemBase):
     _priority = 2
@@ -39,12 +44,17 @@ class MQTTConfiguration(ItemBase):
         self._form = MQTTForm
         
     def process_form(self,session,request):
-        form = self._form().newInstance()        
+        form = MQTTForm()
+        
         form_dict = request.form
+        
         valid, form_list = form.from_form(form_dict)
+        
+        form_html = form.render(self.item_description, form_list)
+        
         import json
         print (json.dumps(form_list))
-        return(Template('form.html').render(page=self.item_description, application=config, session=session, form=form_list))
+        return(Template('config_item.html').render(page=self.item_description, application=config, session=session, form=form_html))
 
         
         
