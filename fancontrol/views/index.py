@@ -32,3 +32,17 @@ async def static(request, session, path):
         log.error (f'file static/{path}.gz not found!')
         abort(404, reason="File not found")
     return send_file('fancontrol/static/' + path, compressed=True, file_extension='.gz', max_age=(3600))
+
+@app.route('favicon.ico')
+async def static_ico(request):
+    
+    favicon = 'fancontrol/static/favicon.ico'
+    
+    try:
+        os.stat(favicon)
+        return send_file(favicon , max_age=(3600))
+    except OSError:
+        log.error (f'file {favicon} not found!')
+        abort(404, reason="File not found")
+        
+    return send_file(favicon , compressed=True, max_age=(3600))

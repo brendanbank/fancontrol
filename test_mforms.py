@@ -1,8 +1,8 @@
 import sys, os
 sys.path.append('/Users/brendan/src/fancontrol/lib')
 
-from mforms import BaseForm, TextField, NumberField, PasswordField, CheckboxField, LayoutHR
-import mforms.validators as validators
+from uforms import BaseForm, TextField, NumberField, PasswordField, CheckboxField, LayoutHR
+import uforms.validators as validators
 
 import json
 
@@ -33,7 +33,7 @@ if __name__ == "__main__":
 #     number = FormNumber("brendan", "1")
 #     print (number.validate())
 
-    template_dir = 'lib/mforms/templates/'
+    template_dir = 'lib/uforms/templates/'
     print (dir(MyForm))
     for fiel in os.listdir(template_dir):
         if fiel.endswith('.py'):
@@ -48,7 +48,6 @@ if __name__ == "__main__":
     valid, form_dict = form.from_form(form_dict)
     
     print (json.dumps(form_dict))
-    print (form_dict)
     
 #     print (form.render("test", form_dict))
     

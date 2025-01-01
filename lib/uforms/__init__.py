@@ -1,13 +1,15 @@
 import os, logging
 from utemplate import recompile
-from mforms.utemplate import Template
-from mforms.mforms import BaseForm
-from mforms.fields.core import TextField
-from mforms.fields.core import NumberField
-from mforms.fields.core import PasswordField
-from mforms.fields.core import CheckboxField
+from uforms.utemplate import Template
+from uforms.uforms import BaseForm
+from uforms.fields.core import TextField
+from uforms.fields.core import NumberField
+from uforms.fields.core import PasswordField
+from uforms.fields.core import CheckboxField
+from uforms.fields.core import DisableCheckboxField
 
-from mforms.fields.layout import LayoutHR
+
+from uforms.fields.layout import LayoutHR
 
 
 

@@ -12,14 +12,15 @@ class ItemBase:
     
     def __init__(self, application_configuration, item_configuration):
             self.item_configuration =  item_configuration
-            self.application_configuration = application_configuration            
+            self.application_configuration = application_configuration        
         
     @classmethod
     def factory_configuration_name(cls):
         return(cls.item_name)
+    
+
 
 class ItemFactory:
-    
     def __init__(self, item_directory, config):
         self._configuration_classes = dict()
         self.item_directory = item_directory
@@ -168,10 +169,21 @@ class ConfigurationBase:
             self._clean_obj(self._storage)
             with open(self._configfile, "w") as f:
                 json.dump(self._storage, f)
-            log.debug("Credentials saved.")
+            log.debug("configuration saved.")
         else:
             log.debug("configuration not changed, not saved.")
-            
+    
+    def get_config_by_name(self,name):
+        return self._storage.get(name)
+    
+    def create_dict_from_config(self, fields):
+        config_dict = {}
+        for field_name in fields:
+            value = self.get_config_by_name(field_name) # check this call if it can be replaced with getattr
+            if not value == None:
+                config_dict[field_name] = value
+                        
+        return config_dict
 
 
 

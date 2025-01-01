@@ -1,5 +1,3 @@
-
-* Allow columns to expand to the right (extra <div class="col">
 * Save to settings.json
 * multi form save
 * change password
