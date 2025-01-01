@@ -1,0 +1,110 @@
+[
+	{
+		"valid": true,
+		"value": "srv4.bgwlan.nl",
+		"error": "cannot be empty.",
+		"label": "Broker Hostname",
+		"name": "broker_hostname",
+		"valid_css": "is-valid",
+		"css": "col-md-6",
+		"	": true,
+		"required": true,
+		"type": "text"
+	},
+	{
+		"valid": true,
+		"value": "1",
+		"error": "can only contain numbers.",
+		"label": "Broker Port",
+		"name": "broker_port",
+		"valid_css": "is-valid",
+		"css": "col-md-6",
+		"fullwidth": true,
+		"required": true,
+		"type": "text"
+	},
+	{
+		"valid": false,
+		"value": "",
+		"error": "cannot be empty.",
+		"label": "Broker Username",
+		"name": "broker_username",
+		"valid_css": "is-valid",
+		"css": "col-md-6",
+		"fullwidth": true,
+		"required": true,
+		"type": "text"
+	},
+	{
+		"valid": false,
+		"value": "",
+		"error": "Password field must contain at least 8 characters has to have one letter and digit and a special characters \"[!@#$%^&*(),.?\\:{}|<>~_].\"",
+		"label": "Broker Password",
+		"name": "broker_password",
+		"valid_css": "is-valid",
+		"css": "col-md-6",
+		"fullwidth": true,
+		"required": true,
+		"type": "password"
+	},
+	{
+		"valid": true,
+		"value": "off",
+		"error": "cannot be empty.",
+		"label": "Use Secure Socket Layer (SSL)?",
+		"name": "broker_ssl",
+		"valid_css": "is-valid",
+		"css": "col-md-12",
+		"fullwidth": true,
+		"required": false,
+		"type": "checkbox"
+	},
+	{
+		"valid": false,
+		"value": "",
+		"error": "",
+		"label": "",
+		"name": "hr_line",
+		"valid_css": "is-valid",
+		"css": "col-md-12",
+		"fullwidth": true,
+		"required": false,
+		"type": "hr"
+	},
+	{
+		"valid": false,
+		"value": "fancontrol/logging",
+		"error": "cannot be empty.",
+		"label": "Logging channel",
+		"name": "logging_channel",
+		"valid_css": "is-valid",
+		"css": "col-md-12",
+		"fullwidth": true,
+		"required": true,
+		"type": "text"
+	},
+	{
+		"valid": false,
+		"value": "fancontrol/reporting",
+		"error": "cannot be empty.",
+		"label": "Reporting channel",
+		"name": "reporting_channel",
+		"valid_css": "is-valid",
+		"css": "col-md-12",
+		"fullwidth": true,
+		"required": true,
+		"type": "text"
+	},
+	{
+		"valid": false,
+		"value": "fancontrol/command",
+		"error": "cannot be empty.",
+		"label": "Command channel",
+		"name": "command_channel",
+		"valid_css": "is-valid",
+		"css": "col-md-12",
+		"fullwidth": true,
+		"required": true,
+		"type": "text"
+	}
+]
