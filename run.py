@@ -18,4 +18,4 @@ for fiel in os.listdir(template_dir):
         log.debug(f'removed file {fiel}')
         os.remove(template_dir + fiel)
 
-app.run(port=5999,debug=True)
+app.run(port=5999,debug=True)	
