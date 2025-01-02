@@ -12,21 +12,22 @@ logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
 
 class BaseForm(object):
+
+    form_description = "form_description = empty"
+
     def __init__(self, css=""):
         self.css = css
         self.disable_id = None
         self.form_items = {}
         self._order = list()
-        self._form_configuration_fields = list()
+        self._form_fields = list()
         self._class_args = list()
         self._cls = None
-        self.name = self.__class__.__name__
+        self.name = self.__class__.__dict__
         
-        self._fill_self()
+        self._fill_self()        
+        
 #         self._create_empty_class()
-
-    def render(self, header, form_dict):
-        return(Template('form.tmpl').render(header=header, form=form_dict))
         
     def _fill_self(self):
         for cls_attribute in dir(self):
@@ -36,7 +37,7 @@ class BaseForm(object):
                 continue
 
             if issubclass(obj.__class__, BaseField):
-                self._order.append(cls_attribute)
+                
                 clsobj = getattr(self, cls_attribute)
                 setattr(clsobj, 'name', cls_attribute)                
                 self.form_items[cls_attribute] = clsobj
@@ -47,14 +48,19 @@ class BaseForm(object):
                     self.disable_id = cls_attribute
                     
                 if not issubclass(obj.__class__, LayoutBase):
-                    self._form_configuration_fields.append(cls_attribute)
+                    self._form_fields.append(cls_attribute)
                 
                 
                 
                 
                 clsobj.name = cls_attribute
                 
-    def from_form(self, form):
+        
+        for clsobj in sorted(self.form_items.values() , key=lambda k: k._field_order):
+            self._order.append(clsobj.name)
+
+                
+    def validate_form(self, form):
         self.form_list = list()
         valid = True
         form_list = list()
@@ -81,6 +87,7 @@ class BaseForm(object):
 
             if issubclass(obj.__class__, LayoutBase):
                 field_dict['valid'] = True
+                log.debug(f'attribue {name} ({obj.__class__.__name__}) valid: True')
                 
             elif form and form.get(name):
                 
@@ -88,6 +95,8 @@ class BaseForm(object):
                                 
                 if obj.validation:
                     field_dict['valid'] = obj.validation(form.get(name))
+                    log.debug(f'validation on attribue {name} ({obj.__class__.__name__}) valid: {field_dict['valid']}')
+
                     
                 if not field_dict['valid']:
                     valid = False
@@ -104,8 +113,64 @@ class BaseForm(object):
             field_dict.update(obj.additional_attributes)            
 
             form_list.append(field_dict)
-        
+        log.debug(f'validation from_form {valid}')
         return(valid, form_list)
         
+    def create_dict_from_named_fields(self, strorage_dict, form_fields):
+        field_dict = {}
+        for field_name in form_fields:
+            print (strorage_dict)
+            value = strorage_dict.get(field_name)
+            if not value == None:
+                field_dict[field_name] = value
+        return field_dict
 
+    def render(self, header, form_dict):
+        return(Template('form.tmpl').render(header=header, form=form_dict))
+
+    def process_form(self, current_settings, session, request):
+                
+        form_dict = {
+            'name': self.__class__.__name__,
+            'fields': list(),
+            'alert': False,
+            'alert_type': "success",
+            'disable_id': self.disable_id
+        }
+                
+        form_fields = self._form_fields
+        
+        field_dict = {}
+        field_dict['enable'] = "on"
+        
+        if request.method == "GET":  # fetch current settings
+            print (current_settings)
+            field_dict = self.create_dict_from_named_fields(current_settings, form_fields)
+            
+        elif request.method == "POST" and request.form and not request.form.get('submit') == None and len(request.form) == 1:
+            current_settings['enable'] = "off"  # dusabked checkbox is set
+            field_dict['enable'] = "off"
+            field_dict = self.create_dict_from_named_fields(current_settings, form_fields)
+            form_dict['alert'] = f"{self.form_description} was disabled!"
+            form_dict['alert_type'] = "warning"
+            
+        else:
+            for field_name in request.form.keys():
+                field_dict[field_name]  = request.form[field_name]
+                
+            print (field_dict)
+            
+        log.debug(f'field_dict: {field_dict}')
+        
+        valid, fields_list = self.validate_form(field_dict)
+
+        if request.method == "POST" and valid and field_dict.get('enable') == "on":
+            for field_name in self._form_fields:
+                current_settings[field_name] =  request.form.get(field_name, False)
+                
+            form_dict['alert'] = f"{self.form_description} was successfully saved!"
+
+        form_dict['fields'] = fields_list
+        form_html = self.render(self.form_description, form_dict)
+        return form_html
 

@@ -5,7 +5,7 @@ import logging
 
 log = logging.getLogger(__name__)
 
-class ItemBase:
+class BaseItem:
     _priority = 255
     item_name = None
     form = None
@@ -49,7 +49,7 @@ class ItemFactory:
                     for item in dir(module_obj):
                         cls = getattr(module_obj,item)
                         if (str(type(cls)) == str(type)) :
-                            if issubclass(cls, ItemBase) and cls != ItemBase:
+                            if issubclass(cls, BaseItem) and cls != BaseItem:
                                 self._configuration_classes[cls.factory_configuration_name()] = cls
                                 all_configuration_classes.append(cls)
 
@@ -114,6 +114,9 @@ class ConfigurationBase:
         self.__getattr__ = _get
         self.__setattr__ = _set
 
+    def get (self,name):
+        return (self.__getattr__(name))
+    
     @property
     def __DO_NOT_REMOVE(self):
         pass
@@ -173,17 +176,11 @@ class ConfigurationBase:
         else:
             log.debug("configuration not changed, not saved.")
     
-    def get_config_by_name(self,name):
+    def _get_config_by_name(self,name):
         return self._storage.get(name)
     
-    def create_dict_from_config(self, fields):
-        config_dict = {}
-        for field_name in fields:
-            value = self.get_config_by_name(field_name) # check this call if it can be replaced with getattr
-            if not value == None:
-                config_dict[field_name] = value
-                        
-        return config_dict
+    def __repr__(self):
+        return f'<{self.__class__.__name__} settings {self._storage}>'
 
 
 
@@ -223,3 +220,21 @@ class Configuration(ConfigurationBase):
             self._namespace[namespace] = Configuration(self._storage[namespace], configfile=None)
 
         return(self._namespace[namespace])
+    
+    # allows for item assignment like variabgel['test'] so the Configuration object behaves almost like a dict
+
+    def __getitem__(self, key):
+        return (self.__getattr__(key))
+    def __setitem__(self, key, value):
+        return (self.__setattr__(key,value))
+
+
+if __name__ == "__main__":
+    
+    config = Configuration(configfile=None)
+    print (config)
+    config['a'] = 1
+    print (config['a'])
+
+
+    

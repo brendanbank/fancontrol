@@ -11,8 +11,20 @@ from microdot.utemplate import Template
 async def setting_name(request, setting_name):
 
     item_clsobj = config.factory.get(setting_name)
+    
     session = request.app._session.get(request)
     
     setting_obj = config.factory.get(setting_name)
+
+    item_configuration = setting_obj.item_configuration
     
-    return setting_obj.process_form(session, request)
+    print (item_configuration)
+
+
+    formobj = setting_obj.formcls()
+    
+    form_html = formobj.process_form(item_configuration, session, request)
+    
+    config.save_config()
+
+    return(Template('config_item.html').render(page=setting_obj.form_description, application=config, session=session, form=form_html))

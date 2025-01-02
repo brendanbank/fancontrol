@@ -2,11 +2,13 @@
 def render(header, form):
     yield """
 """
-    if form.get('success'):
+    if form.get('alert'):
         yield """<div class=\"row text-center row justify-content-md-center\">
-    <div class=\"alert alert-success floating-alert alert-dismissible fade show text-center\" timeout=\"2000\" role=\"alert\">
+    <div class=\"alert alert-"""
+        yield str(form['alert_type'])
+        yield """ floating-alert alert-dismissible fade show text-center\" timeout=\"2000\" role=\"alert\">
       <span><i class=\"bi bi-check-circle-fill\"></i> """
-        yield str(form.get('success'))
+        yield str(form.get('alert'))
         yield """
       <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button></span>
     </div>
@@ -60,7 +62,7 @@ def render(header, form):
         elif field.get("type") == "hr":
             yield """            <div class=\""""
             yield str(field.get("css"))
-            yield """ position-relative mt-2 text-center div-line\">
+            yield """ position-relative mt-3 text-center div-line\">
                    <hr class=\"hr-line \">
                    <span class=\"text-line fw-bold fs-6\">"""
             yield str(field.get("value"))

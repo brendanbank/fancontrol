@@ -4,3 +4,28 @@
   top: 95px;
   z-index: 1;
 }
+
+/* Custom CSS for line with text through */
+.div-line {
+  position: relative;
+  text-align: center;
+}
+.hr-line {
+  position: absolute;
+  top: 50%;
+  left: 0%;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  width: 100%;
+  margin: 0;
+  z-index: -1000;
+}
+.text-line {
+  margin: 0;
+  background-color: white;
+  z-index: 1000;
+  display: inline-block;
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}

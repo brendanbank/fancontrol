@@ -1,9 +1,9 @@
 {% args header, form %}
 
-{% if form.get('success') %}
+{% if form.get('alert') %}
 <div class="row text-center row justify-content-md-center">
-    <div class="alert alert-success floating-alert alert-dismissible fade show text-center" timeout="2000" role="alert">
-      <span><i class="bi bi-check-circle-fill"></i> {{ form.get('success') }}
+    <div class="alert alert-{{form['alert_type']}} floating-alert alert-dismissible fade show text-center" timeout="2000" role="alert">
+      <span><i class="bi bi-check-circle-fill"></i> {{ form.get('alert') }}
       <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></span>
     </div>
 </div>
@@ -27,7 +27,7 @@
                     </div>
                 </div>
 {% elif field.get("type") == "hr" %}
-            <div class="{{ field.get("css") }} position-relative mt-2 text-center div-line">
+            <div class="{{ field.get("css") }} position-relative mt-3 text-center div-line">
                    <hr class="hr-line ">
                    <span class="text-line fw-bold fs-6">{{ field.get("value") }}</span>
             </div>

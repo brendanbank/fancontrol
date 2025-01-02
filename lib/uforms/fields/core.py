@@ -1,13 +1,16 @@
 import uforms.validators as validators
 
+_field_order = 0
+
 class BaseField(object):
     error="cannot be empty."
     
     def __init__(self, *args, **kwargs):
+        global _field_order
+        
         self._kwargs = kwargs
         self._args = args
         self.additional_attributes = {}
-
         self.name =  kwargs.get('name', "")
         self.value =  kwargs.get('value', "")
         self.label = kwargs.get('label', "")
@@ -19,8 +22,11 @@ class BaseField(object):
         self.error_txt =  kwargs.get('valid_css', None)
         self.extend_class =  kwargs.get('extend_class', None)
         self.prepend_class =  kwargs.get('prepend_class', None)
-
             
+        _field_order = _field_order + 1
+
+        self._field_order = int(_field_order)
+
         if self.error_txt:
             self.error = self.error_txt
 
