@@ -1,6 +1,6 @@
 import sys
 sys.path.append('/Users/brendan/src/fancontrol/lib')
-from configuration import ItemBase
+from uconfiguration import ItemBase
 import logging
 log = logging.getLogger(__name__)
 
@@ -8,7 +8,7 @@ log = logging.getLogger(__name__)
 class WiFiConfiguration(ItemBase):
     _priority = 1
     
-    """ wifi configuration class """    """ wifi configuration class """
+    """ wifi uconfiguration class """    """ wifi uconfiguration class """
     config_attribute = True
     config_name = 'wifi'
     config_description = 'WiFi Configuration'

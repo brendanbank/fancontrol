@@ -1,10 +1,13 @@
 import sys
-from configuration import ItemBase
+sys.path.append('/Users/brendan/src/fancontrol/configuration_test')
+
+from items import BaseItem
+
 import logging
 log = logging.getLogger(__name__)
 
-class WiFiConfiguration(ItemBase):
-    """ wifi configuration class """
+class WiFiConfiguration(BaseItem):
+    """ wifi uconfiguration class """
     _priority = 1    
     item_name = 'wifi'
     config_description = 'WiFi Configuration'
@@ -13,6 +16,8 @@ class WiFiConfiguration(ItemBase):
     def __init__(self, application_configuration, item_configuration):
         log.debug(f'WiFiConfiguration started')
         super().__init__(application_configuration, item_configuration)
+        
+        item_configuration.test = 0
     
     def config_ap(self):
         if not self.item_configuration.ap_ssid:

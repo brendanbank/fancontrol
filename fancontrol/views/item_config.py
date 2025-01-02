@@ -1,7 +1,7 @@
 import logging
 log = logging.getLogger(__name__)
 
-from fancontrol.config import app, config
+from fancontrol.config import app, config, factory
 from fancontrol.views.login_view import authorization_required, admin_login
 from microdot.utemplate import Template
 
@@ -10,11 +10,9 @@ from microdot.utemplate import Template
 @authorization_required
 async def setting_name(request, setting_name):
 
-    item_clsobj = config.factory.get(setting_name)
-    
     session = request.app._session.get(request)
     
-    setting_obj = config.factory.get(setting_name)
+    setting_obj = factory.get(setting_name)
 
     item_configuration = setting_obj.item_configuration
     
@@ -27,4 +25,4 @@ async def setting_name(request, setting_name):
     
     config.save_config()
 
-    return(Template('config_item.html').render(page=setting_obj.form_description, application=config, session=session, form=form_html))
+    return(Template('config_item.html').render(page=setting_obj.form_description, factory=factory, application=config, session=session, form=form_html))

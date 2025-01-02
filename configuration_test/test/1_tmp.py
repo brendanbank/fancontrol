@@ -1,10 +1,12 @@
 import sys
-from configuration import ItemBase
+sys.path.append('/Users/brendan/src/fancontrol/configuration_test')
 
-class prio_2(ItemBase):
+from items import BaseItem
+
+class prio_2(BaseItem):
     _priority = 2
     
-    """ wifi configuration class """
+    """ wifi uconfiguration class """
     config_attribute = True
     item_name = 'prio_2'
     config_description = 'prio_2'

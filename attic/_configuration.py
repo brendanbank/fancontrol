@@ -55,9 +55,9 @@ class ItemFactory:
 
             
             self._list = sorted(all_configuration_classes, key=lambda k: k._priority)
-            log.debug(f'loaded configuration classes {self._configuration_classes}')
+            log.debug(f'loaded uconfiguration classes {self._configuration_classes}')
         else:
-            log.debug(f'no configuration classes directory configured')
+            log.debug(f'no uconfiguration classes directory configured')
 
 
     def get_objs(self):
@@ -131,10 +131,10 @@ class ConfigurationBase:
         return json.dumps(self._storage)
 
     def load_config(self):
-        """Load configuration from the file."""
+        """Load uconfiguration from the file."""
         try:
             with open(self._configfile, "r") as f:
-                log.info(f"Loaded configuration from file: {self._configfile}")
+                log.info(f"Loaded uconfiguration from file: {self._configfile}")
                 config_obj = json.load(f)
                 
         except Exception as e:
@@ -166,15 +166,15 @@ class ConfigurationBase:
                 self._clean_obj(obj[key])
     
     def save_config(self):
-        """Save configuration to the file."""
+        """Save uconfiguration to the file."""
         modified = self._has_changed(self._storage)
         if modified:
             self._clean_obj(self._storage)
             with open(self._configfile, "w") as f:
                 json.dump(self._storage, f)
-            log.debug("configuration saved.")
+            log.debug("uconfiguration saved.")
         else:
-            log.debug("configuration not changed, not saved.")
+            log.debug("uconfiguration not changed, not saved.")
     
     def _get_config_by_name(self,name):
         return self._storage.get(name)

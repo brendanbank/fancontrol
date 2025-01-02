@@ -1,11 +1,11 @@
 import sys
 sys.path.append('/Users/brendan/src/fancontrol/lib')
-from configuration import ItemBase
+from uconfiguration import ItemBase
 
 class MQTTConfiguration(ItemBase):
     _priority = 2
     
-    """ wifi configuration class """
+    """ wifi uconfiguration class """
     config_attribute = True
     config_name = 'mqtt'
     config_description = 'MQTT Configuration'

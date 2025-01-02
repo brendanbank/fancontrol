@@ -2,7 +2,8 @@ import sys
 # sys.path.append('/Users/brendan/src/fancontrol/lib')
 from uforms import BaseForm, TextField, NumberField, CheckboxField, PasswordField, DisableCheckboxField, LayoutHR
 from uforms.validators import validate_hostname
-from configuration import BaseItem
+from fancontrol.items import BaseItem
+
 import logging
 log = logging.getLogger(__name__)
 
@@ -25,7 +26,7 @@ class WiFiForm(BaseForm):
 
 
 class WiFiConfiguration(BaseItem):
-    """ wifi configuration class """
+    """ wifi uconfiguration class """
     _priority = 1    
     item_name = 'wifi'
     

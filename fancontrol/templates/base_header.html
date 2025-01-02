@@ -35,7 +35,7 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               
-                {% for item in application.factory._list %}
+                {% for item in factory._list %}
                 <li><a class="dropdown-item" href="/config/{{ item.item_name }}">{{ item.item_name }}</a></li>
                 {% endfor %}
                 

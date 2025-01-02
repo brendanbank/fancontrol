@@ -6,7 +6,7 @@ from uforms import BaseForm, TextField, NumberField, CheckboxField, PasswordFiel
 
 from fancontrol.password import hash_password, verify_password
 from fancontrol.config import config
-from configuration import BaseItem
+from fancontrol.items import BaseItem
 
 class ChangePasswordForm(BaseForm):
     form_description = 'User Credentials'
@@ -19,7 +19,7 @@ class ChangePasswordForm(BaseForm):
 
 
 class Users(BaseItem):
-    """ user configuration class """
+    """ user uconfiguration class """
     _priority = 3    
     item_name = 'users'
     item_description = 'User Configuration'

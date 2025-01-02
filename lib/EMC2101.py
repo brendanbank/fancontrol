@@ -15,7 +15,7 @@ EMC2101_EXTERNAL_TEMP_MSB = const(0x01)  # high byte for the external temperatur
 EMC2101_EXTERNAL_TEMP_LSB = const(0x10)  # low byte for the external temperature reading
 
 EMC2101_STATUS = const(0x02)  # Status register
-EMC2101_REG_CONFIG = const(0x03)  # configuration register
+EMC2101_REG_CONFIG = const(0x03)  # uconfiguration register
 EMC2101_REG_DATA_RATE = const(0x04)  # Data rate config
 EMC2101_TEMP_FORCE = const(0x0C)  # Temp force setting for LUT testing
 EMC2101_TACH_LSB = const(0x46)  # Tach RPM data low byte

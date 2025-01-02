@@ -6,7 +6,7 @@ import os
 import logging
 log = logging.getLogger(__name__)
 
-from fancontrol.config import app, config
+from fancontrol.config import app, config, factory
 
 log.debug (f'add route / {app}')
 
@@ -14,7 +14,7 @@ log.debug (f'add route / {app}')
 @with_session
 @authorization_required
 async def index(req, session):
-    return Template('index.html').render(page='Home', application=config, session=session)
+    return Template('index.html').render(page='Home', factory=factory, application=config, session=session)
 
 @app.route('/static/<path:path>')
 @with_session

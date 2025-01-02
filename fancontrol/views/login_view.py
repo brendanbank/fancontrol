@@ -3,10 +3,11 @@ from microdot.session import Session, with_session
 from microdot.utemplate import Template
 from microdot.helpers import wraps
 from microdot.microdot import invoke_handler
+
 import logging
 log = logging.getLogger(__name__)
 
-from fancontrol.config import app, config
+from fancontrol.config import app, config, factory
 
 def login_redirect(req):
     
@@ -46,7 +47,6 @@ def admin_login(request, session):
 
         username = request.form.get('username')
         password = request.form.get('password')
-        factory = config.factory
         users = factory.get("users")
 
         if request.form and users.verify_username_password(username, password):
@@ -60,7 +60,7 @@ def admin_login(request, session):
             form['username'] = username
             log.critical(f'login failed for user {username}')
 
-    return Template('login.html').render(page='Login',application=config, session=session, form=form)
+    return Template('login.html').render(page='Login',application=config, factory=factory, session=session, form=form)
 
 def admin_logout(request, session):
     del(session['username'])

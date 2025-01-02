@@ -83,7 +83,7 @@ class WiFiManager:
 
     def web_server(self):
         self.start_ap()
-        """Start a simple web server for Wi-Fi configuration."""
+        """Start a simple web server for Wi-Fi uconfiguration."""
         addr = socket.getaddrinfo("0.0.0.0", 80)[0][-1]
         s = socket.socket()
         s.bind(addr)
@@ -139,7 +139,7 @@ class WiFiManager:
             networks = self.scan_networks()
             options = "".join([f"<option value='{ssid}'>{ssid}</option>" for ssid in networks])
 
-            # Serve a configuration form
+            # Serve a uconfiguration form
             html = f"""<!DOCTYPE html>
             <html>
             <head><title>Wi-Fi Configuration</title></head>
@@ -164,7 +164,7 @@ class WiFiManager:
         return (True)
 
     def start(self):
-        """Main entry point to handle Wi-Fi configuration."""
+        """Main entry point to handle Wi-Fi uconfiguration."""
         ssid, password = self.load_credentials()
     
         if ssid and password:

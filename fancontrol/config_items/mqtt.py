@@ -5,7 +5,7 @@ log = logging.getLogger(__name__)
 import re
 
 from fancontrol.config import config
-from configuration import BaseItem
+from fancontrol.items import BaseItem
 from uforms import BaseForm, TextField, NumberField, CheckboxField, PasswordField, DisableCheckboxField, LayoutHR
 from uforms.validators import validate_hostname
 from microdot.utemplate import Template

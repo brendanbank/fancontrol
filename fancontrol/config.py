@@ -2,14 +2,19 @@ import sys, os
 import ubinascii
 
 from microdot import Microdot, Response
-from configuration import Configuration, ItemFactory
+from uconfiguration import Configuration
+from fancontrol.items import ItemFactory
 from fancontrol.password import generate_password, hash_password
 from microdot.session import Session
 from microdot.utemplate import Template
 from utemplate import recompile
 
+from uconfiguration.storage.json import JsonStorage
 
-config = Configuration(configfile="config.json")
+storage = JsonStorage(configfile="config.json")
+config = Configuration(storage)
+config.load_config()
+
 
 application_name = "Fan Control"
 app = Microdot()

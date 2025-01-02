@@ -5,7 +5,7 @@ import os
 
 log = logging.getLogger(__name__)
 
-CONFIGURATION_DIR = "lib/configuration/items"
+CONFIGURATION_DIR = "lib/uconfiguration/items"
 
 class ItemBase:
     _priority = 255
@@ -49,7 +49,7 @@ class ItemFactory:
 
         
 
-        log.debug(f'loaded configuration classes {self._configuration_classes}')
+        log.debug(f'loaded uconfiguration classes {self._configuration_classes}')
 
     def get_objs(self):
         return(self._configuration_classes)
