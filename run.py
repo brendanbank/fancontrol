@@ -21,4 +21,8 @@ for fiel in os.listdir(template_dir):
         
 uforms.initialize(recompile=True)
 
+from fancontrol.config import websocket_logging_list
+
+# print (websocket_logging_list)
+
 app.run(port=5999,debug=True)	

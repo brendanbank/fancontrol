@@ -1,4 +1,4 @@
-import os, sys
+simport os, sys
 
 import logging
 log = logging.getLogger(__name__)

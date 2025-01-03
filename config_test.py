@@ -1,4 +1,4 @@
-    import sys
+import sys
 sys.path.append('/Users/brendan/src/fancontrol/lib')
 from uconfiguration import Configuration
 
@@ -16,12 +16,17 @@ if __name__ == "__main__":
     config.load_config()
     
     print (storage._has_changed(storage._storage))
-    config.a = 1
-    # config["b"] = 2
+    # config.a = 1
+    
+    
+    config["b"] = 2
     print (storage._has_changed(storage._storage))
     
+    test = Configuration({})
     
     namespace_users = config.namespace("user")
+    
+    namespace_users.test = test
     
     log.debug (namespace_users)
 
@@ -32,7 +37,7 @@ if __name__ == "__main__":
 #     brendan.password = "test"
 #     brendan.username = "Brendan Bank"
     
-    config.save_config()
+    # config.save_config()
     
     # config["b"] = 2
     # log.debug (config.b)

@@ -19,10 +19,10 @@ actions = {
 
 class WiFiForm(BaseForm):
     form_description = 'WiFi Configuration'
-    hr_line_1 = LayoutHR(value="Access Point Configuration", css="col-md-6", prepend_class="col-md-3", extend_class="col-md-3")
+    hr_line_1 = LayoutHR(value="Access Point Configuration", css="col-md-12")
     ap_ssid = TextField(label="Access Point Network Name SSID", css="col-md-6", prepend_class="col-md-3", extend_class="col-md-3")
     ap_password = PasswordField(label="Access Point", css="col-md-6", show_password=True, prepend_class="col-md-3", extend_class="col-md-3")
-    hr_line_2 = LayoutHR(css="col-md-6", prepend_class="col-md-3", extend_class="col-md-3")
+    hr_line_2 = LayoutHR(css="col-md-12")
 
 
 class WiFiConfiguration(BaseItem):

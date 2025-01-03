@@ -1,5 +1,6 @@
 import sys, os
 import ubinascii
+import logging
 
 from microdot import Microdot, Response
 from uconfiguration import Configuration
@@ -7,7 +8,9 @@ from fancontrol.items import ItemFactory
 from fancontrol.password import generate_password, hash_password
 from microdot.session import Session
 from microdot.utemplate import Template
+from microdot.cors import CORS
 from utemplate import recompile
+from fancontrol.ws_types import BoundedList, WebSocketHandler
 
 from uconfiguration.storage.json import JsonStorage
 
@@ -15,9 +18,15 @@ storage = JsonStorage(configfile="config.json")
 config = Configuration(storage)
 config.load_config()
 
+# configure logging
+websocket_logging_list = BoundedList(10)
+logging.getLogger().addHandler(WebSocketHandler(websocket_logging_list))
+
 
 application_name = "Fan Control"
 app = Microdot()
+CORS(app, allowed_origins=['http://127.0.0.1:5999/logging'], allow_credentials=True)
+
 
 saveconfig = False
 

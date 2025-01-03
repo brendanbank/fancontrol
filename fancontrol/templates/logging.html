@@ -1,0 +1,26 @@
+{% args page, application, factory, session%}
+
+<script defer src="/static/sse.js"></script>
+
+{% include 'base_header.html' %}
+
+    <div class="container mt-5">
+        <h1 class="text-center">SSE Messages</h1>
+        <div class="card">
+            <div class="card-header">
+                Server-Sent Events
+            </div>
+            <div class="card-body">
+                <div id="messages" class="mb-3 border rounded p-3" style="height: 200px; overflow-y: auto; background-color: #f8f9fa;">
+                    <p class="text-muted">Messages will appear here...</p>
+                </div>
+                <div class="d-flex">
+                    <button id="startButton" class="btn btn-success me-2">Start Listening</button>
+                    <button id="stopButton" class="btn btn-danger me-2" disabled>Stop Listening</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% include 'base_footer.html' %}

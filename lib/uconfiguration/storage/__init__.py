@@ -5,6 +5,9 @@ log = logging.getLogger(__name__)
 class NamespaceException(Exception):
     pass
 
+class ValueType(Exception):
+    pass
+
 class StorageBase (object):
     def __init__(self, DICT_OBJ={}, oldest_parent = None, namespace="main"):
         log.debug (f'started {self.__class__.__name__} ')
@@ -41,11 +44,9 @@ class StorageBase (object):
         
         self._storage['_modified'] = True
         
-        print (isinstance(value, type))
-        if isinstance(value, type):
-            print (type(value))
-            raise (TypeError, f'value is an instance of {type(value)}')
-            
+        if hasattr(value, '__dict__'):
+            raise  ValueType(f'Cannot store an object, value is an instance of {type(value)}')
+
         self._storage[key] = value
 
         log.debug (f'Storage.set key: {key} value: {value}')

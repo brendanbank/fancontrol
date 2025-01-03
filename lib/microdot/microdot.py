@@ -53,6 +53,7 @@ MUTED_SOCKET_ERRORS = [
     54,  # Connection reset by peer
     104,  # Connection reset by peer
     128,  # Operation on closed socket
+    -30592, #MBEDTLS_ERR_SSL_FATAL_ALERT_MESSAGE
 ]
 
 
@@ -508,10 +509,14 @@ class Request:
 
     @staticmethod
     async def _safe_readline(stream):
-        line = (await stream.readline())
-        if len(line) > Request.max_readline:
-            raise ValueError('line too long')
-        return line
+        try:
+            line = (await stream.readline())
+            if len(line) > Request.max_readline:
+                raise ValueError('line too long')
+            return line
+        except OSError as e:
+            print (e)
+            return (b"")
 
 
 class Response:

@@ -2,6 +2,9 @@ from microdot import redirect, send_file, abort
 from microdot.session import Session, with_session
 from microdot.utemplate import Template
 from fancontrol.views.login_view import authorization_required, admin_login
+from microdot.sse import with_sse
+import asyncio
+
 import os
 import logging
 log = logging.getLogger(__name__)
@@ -46,3 +49,25 @@ async def static_ico(request):
         abort(404, reason="File not found")
         
     return send_file(favicon , compressed=True, max_age=(3600))
+
+
+log_dict = {
+    "event": "error",
+    "data": { "message": "Something went wrong." }
+}
+
+@app.route('/logging')
+@with_session
+@authorization_required
+async def index(req, session):
+    return Template('logging.html').render(page='Home', factory=factory, application=config, session=session)
+
+import json
+
+@app.route('/event')
+@authorization_required
+@with_sse
+async def event(request, sse):
+    while True:
+        await asyncio.sleep(1)
+        await sse.send(log_dict)
