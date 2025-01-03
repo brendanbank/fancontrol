@@ -1,0 +1,18 @@
+            <div class="{{ field.get("css") }} position-relative mt-3">
+                <label for="{{ field.get("name") }}" class="form-label"><small>{{ field.get("label") }}</small></label>
+                <div class="input-group">
+                    <input type="{{ field.get("type") }}" class="form-control{% if field.get("value") != "" %} {{ field.get("valid_css") }}{% endif %}"
+                            id="{{ field.get("name") }}" name="{{ field.get("name") }}"
+                            value="{{ field.get("value") }}"
+                            aria-describedby="{{ field.get("name") }}_feedback" required>
+                    <div class="invalid-tooltip">
+                      {{ field.get("label") }} {{ field.get("error") }} 
+                    </div>
+{% if field.get("show_password") %}
+                    <button type="button" class="btn btn-outline-secondary toggle-password">
+                        <i class="bi bi-eye-slash"></i>
+                    </button>
+{% endif %}
+
+               </div>
+              </div>

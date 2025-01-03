@@ -1,0 +1,33 @@
+{% args header, form %}
+
+{% if form.get('alert') %}
+<div class="row text-center row justify-content-md-center">
+	<div class="alert alert-{{form['alert_type']}} floating-alert alert-dismissible fade show text-center"
+		timeout="2000" role="alert">
+		<span><i class="bi bi-check-circle-fill"></i> {{ form.get('alert') }}
+			<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></span>
+	</div>
+</div>
+{% endif %}
+
+
+<form id="{{ form['name'] }}" name="{{ form['name'] }}" action="" method="post"
+	class="needs-validation row justify-content-md-center" novalidate>
+	<div class="col-md-12">
+		<h2 class="text-center">{{ header }}</h2>
+	</div>
+	<div class="row col-md-9">
+		{% for field in form.get('fields') %}
+		{% if field.get("prepend_class") %}<div class="position-relative {{field.get(" prepend_class")}} mt-3"></div>{% endif %}
+		{% if field.get("type") == "checkbox" %}
+		{% include 'fields/checkbox.html' %}
+		{% elif field.get("type") == "hr" %}
+		{% include 'fields/hr.html' %}
+		{% else %}
+		{% include 'fields/text.html' %}
+		{% endif %}
+		{% if field.get("extend_class") %}<div class="position-relative {{field.get(" extend_class")}} mt-3"></div>{% endif %}
+		{% endfor %}
+	</div>
+	{% include 'fields/submit.html' %}
+</form>

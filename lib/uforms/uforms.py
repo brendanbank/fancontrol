@@ -1,15 +1,46 @@
 import re
 import logging
 import json
+import os
 import types
 import uforms.validators
 from uforms.fields.core import BaseField, DisableCheckboxField
 from uforms.fields.layout import LayoutBase
 from uforms import Template
+import utemplate
+
 
 
 logging.basicConfig(level=logging.DEBUG)
 log = logging.getLogger(__name__)
+
+def _get_template_path(path):
+    template_dir = f'{path}/templates'
+    cwd_path = os.getcwd() + '/'
+    template_dir = template_dir.replace(cwd_path,"")
+    log.debug(f'template_dir = {template_dir}')
+    return(template_dir)
+
+def _remove_old_compiled_templates(directory):
+    directory += "/"
+    log.debug(f'clean directry: {directory} with compiled templates')
+    for fiel in os.listdir(directory):
+        if fiel.endswith('.py'):
+            log.debug(f'removed files {directory}{fiel}')
+            os.remove(directory + fiel)
+
+def initialize(recompile = False):
+    if recompile:
+        _remove_old_compiled_templates(uforms.template_dir)
+#         _remove_old_compiled_templates(uforms.template_dir + "/fields")
+#         fields_dir = f'{uforms.template_dir}/fields'
+#         loader = utemplate.source.Loader(None, fields_dir)
+#         for f in os.listdir(fields_dir):
+#             if f.endswith(".py"):
+#                 continue
+#             fname = fields_dir + "/" + f
+#             log.debug(f'compile: {fname}')
+#             loader.load(f)
 
 class BaseForm(object):
 
@@ -25,7 +56,7 @@ class BaseForm(object):
         self._cls = None
         self.name = self.__class__.__dict__
         
-        self._fill_self()        
+        self._fill_self()
         
 #         self._create_empty_class()
         
@@ -126,7 +157,7 @@ class BaseForm(object):
         return field_dict
 
     def render(self, header, form_dict):
-        return(Template('form.tmpl').render(header=header, form=form_dict))
+        return(Template('form.html').render(header=header, form=form_dict))
 
     def process_form(self, current_settings, session, request):
                 

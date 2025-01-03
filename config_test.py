@@ -1,4 +1,4 @@
-import sys
+    import sys
 sys.path.append('/Users/brendan/src/fancontrol/lib')
 from uconfiguration import Configuration
 

@@ -1,0 +1,7 @@
+<div class="{{ field.get("css") }} position-relative mt-3">
+     <div class="form-check form-switch">
+       <input class="form-check-input {{ field.get("checkbox_css") }}" type="checkbox" name="{{ field.get("name") }}" 
+       	{% if field.get("value") == "on" %}checked {% endif %}id="{{ field.get("name") }}">
+       <label class="form-check-label" for="{{ field.get("name") }}"><small>{{ field.get("label") }}</small></label>
+     </div>
+ </div>
